@@ -18,3 +18,21 @@ let items1 = document.getElementsByTagName("li");
 for (let i = 0; i < items1.length; i++) {
     items1[i].style.backgroundColor = "tomato";
 }
+
+
+// using query selector
+// 1. Make the 2nd item have green background color
+items[1].style.backgroundColor = "lightgreen";
+
+// 2. Make the 3rd item invisible
+items[2].style.display = "none";
+
+// Using QuerySelectorALL change the font color to green for 2nd item in the item list
+items = document.querySelectorAll(".list-group-item");
+items[1].style.backgroundColor = "darkgreen";
+
+// Choose all the odd elements and make their background green using QuerySelectorALL
+items.forEach(item => {
+    item.style.backgroundColor = "lightgreen";
+});
+
