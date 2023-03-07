@@ -85,19 +85,21 @@ function displayToAppointment() {
             phone.textContent = user.contact;
             let time = document.createElement('td');
             time.textContent = user.time;
-
+            // adding the delete btn
             let deleteTd = document.createElement('td');
             let delbtn = document.createElement('button')
             delbtn.classList = "btn btn-sm btn-danger cancelCall";
             delbtn.textContent = 'X';
             deleteTd.appendChild(delbtn);
 
+            // adding the edit btn
             let editTd = document.createElement('td');
             let editbtn = document.createElement('button')
             editbtn.classList = "btn btn-sm btn-success editCall";
             editbtn.textContent = 'Edit';
             editTd.appendChild(editbtn);
 
+            // appending all the cells to the row
             newRow.appendChild(name);
             newRow.appendChild(phone);
             newRow.appendChild(time);
@@ -119,18 +121,15 @@ function updateAppointment(e) {
             deleteBooking(e);
         }
     } else if (Array.from(e.target.classList).includes('editCall')) {
-        // console.log("editing....");
         let info = deleteBooking(e);
-        // console.log("deleted....");
 
-        // console.log("editing info : " + info.name);
-
+        // populating values into form field
         document.getElementById('name').value = info.name;
         document.getElementById('email').value = info.email;
         document.getElementById('phone').value = info.contact;
         document.getElementById('time').value = info.time;
 
-        // saveInfo(e);
+        // now after editing, submit the form to save new data
     }
 
 }
@@ -146,14 +145,15 @@ function deleteBooking(e) {
     let userDetails = localStorage.getItem("users");
     userDetails = JSON.parse(userDetails);
 
+    // remove the element from the localstorage 
     let removedElement = userDetails.splice(rowIndx - 1, 1)[0];
 
-    // console.log("typeof removedElement : " + typeof removedElement);
-    // console.log("removedElement : " + removedElement.name);
-
+    // update the localstorage with the new array
     localStorage.setItem("users", JSON.stringify(userDetails));
 
+    // remove the table row
     row.remove();
 
+    // return the removed element
     return removedElement;
 }
