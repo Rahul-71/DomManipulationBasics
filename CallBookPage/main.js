@@ -4,7 +4,7 @@ submitBtn.addEventListener('click', saveInfo);
 const appointList = document.getElementById('appointmentTable');
 const appointBody = document.getElementById('appointmentBody');
 
-appointBody.addEventListener('click', deleteAppointment);
+appointBody.addEventListener('click', updateAppointment);
 
 
 displayToAppointment();
@@ -52,9 +52,16 @@ function saveInfo(e) {
     delbtn.textContent = 'X';
     deleteTd.appendChild(delbtn);
 
+    let editTd = document.createElement('td');
+    let editbtn = document.createElement('button')
+    editbtn.classList = "btn btn-sm btn-success editCall";
+    editbtn.textContent = 'Edit';
+    editTd.appendChild(editbtn);
+
     newRow.appendChild(nameTd);
     newRow.appendChild(phoneTd);
     newRow.appendChild(timeTd);
+    newRow.appendChild(editTd);
     newRow.appendChild(deleteTd);
 
     appointBody.appendChild(newRow);
@@ -85,9 +92,16 @@ function displayToAppointment() {
             delbtn.textContent = 'X';
             deleteTd.appendChild(delbtn);
 
+            let editTd = document.createElement('td');
+            let editbtn = document.createElement('button')
+            editbtn.classList = "btn btn-sm btn-success editCall";
+            editbtn.textContent = 'Edit';
+            editTd.appendChild(editbtn);
+
             newRow.appendChild(name);
             newRow.appendChild(phone);
             newRow.appendChild(time);
+            newRow.appendChild(editTd);
             newRow.appendChild(deleteTd);
 
             appointBody.appendChild(newRow);
@@ -97,26 +111,49 @@ function displayToAppointment() {
 }
 
 // delete appointment while click of delete btn
-function deleteAppointment(e) {
+function updateAppointment(e) {
     e.preventDefault();
 
     if (Array.from(e.target.classList).includes('cancelCall')) {
         if (confirm("Are you sure to cancel the appointment ?")) {
-            // getting row of using del btn
-            const row = e.target.parentNode.parentNode;
-            // get the index of this row using 'rowIndex' property of table row
-            const rowIndx = row.rowIndex;
-
-            // fetch the userDetails from localStorage
-            let userDetails = localStorage.getItem("users");
-            userDetails = JSON.parse(userDetails);
-
-            userDetails.splice(rowIndx - 1, 1);
-
-            localStorage.setItem("users", JSON.stringify(userDetails));
-
-            row.remove();
+            deleteBooking(e);
         }
+    } else if (Array.from(e.target.classList).includes('editCall')) {
+        // console.log("editing....");
+        let info = deleteBooking(e);
+        // console.log("deleted....");
+
+        // console.log("editing info : " + info.name);
+
+        document.getElementById('name').value = info.name;
+        document.getElementById('email').value = info.email;
+        document.getElementById('phone').value = info.contact;
+        document.getElementById('time').value = info.time;
+
+        // saveInfo(e);
     }
 
+}
+
+function deleteBooking(e) {
+
+    // getting row of using del btn
+    const row = e.target.parentNode.parentNode;
+    // get the index of this row using 'rowIndex' property of table row
+    const rowIndx = row.rowIndex;
+
+    // fetch the userDetails from localStorage
+    let userDetails = localStorage.getItem("users");
+    userDetails = JSON.parse(userDetails);
+
+    let removedElement = userDetails.splice(rowIndx - 1, 1)[0];
+
+    // console.log("typeof removedElement : " + typeof removedElement);
+    // console.log("removedElement : " + removedElement.name);
+
+    localStorage.setItem("users", JSON.stringify(userDetails));
+
+    row.remove();
+
+    return removedElement;
 }
